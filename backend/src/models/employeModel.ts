@@ -14,6 +14,10 @@ const employeSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    tempPassword: {
+        type: String,
+        required: true
+    },
 
     age: {
         type: Number,
@@ -22,7 +26,6 @@ const employeSchema = new mongoose.Schema({
 
     role: {
         type: String,
-        enum: ["Frontend", "Backend", "Fullstack", "UI designer"],
         default: "Fullstack"
     },
     contrat: {
@@ -38,10 +41,6 @@ const employeSchema = new mongoose.Schema({
         type: Boolean,
         default: true
     },
-    sickLeave: {
-        type: Number,
-        default: 0
-    },
     reason: {
         type: String,
     },
@@ -50,11 +49,6 @@ const employeSchema = new mongoose.Schema({
     },
     endDate: {
         type: Date,
-    },
-    status: {
-        type: String,
-        enum: ["Pending", "Approved", "Rejected"],
-        default: "Pending"
     },
     createDate: {
         type: Date,

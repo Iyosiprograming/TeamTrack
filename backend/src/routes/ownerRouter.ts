@@ -22,11 +22,11 @@ router.post("/create", createOwner);
 router.post("/login", loginOwner);
 
 // PROTECTED ROUTES 
-router.use(authMiddleware);       
+router.use(authMiddleware);
 
 // Employee routes
 router.get("/employees", getAllEmployee);
-router.post("create",createEmploye)
+router.post("/newemploye", createEmploye)
 
 // Sick leave routes
 router.get("/sickleave", getAllSickLeave);

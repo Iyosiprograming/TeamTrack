@@ -55,12 +55,14 @@ export const createEmploye = async (req: Request, res: Response) => {
             return res.status(400).json({ message: "Employee already exists" });
         }
         const password = crypto.randomInt(100000, 999999).toString();
+        const tempPassword = password
         const hashedPassword = await bcrypt.hash(password, 10);
 
         const newEmploye = await employeModel.create({
             name,
             email,
             password: hashedPassword,
+            tempPassword,
             age,
             role,
             contrat: contrat || "Fulltime",
