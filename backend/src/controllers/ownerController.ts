@@ -39,6 +39,45 @@ const createOwner = async (req: Request, res: Response) => {
         return res.status(500).json({ message: "Internal server error" });
     }
 };
+
+// create employe
+export const createEmploye = async (req: Request, res: Response) => {
+    try {
+        const { name, email, password, age, role, contrat, salary } = req.body;
+
+        if (!name || !email || !password || !age || !role || !salary) {
+            return res.status(400).json({ message: "All fields are required" });
+        }
+
+        const existingEmploye = await employeModel.findOne({ email });
+        if (existingEmploye) {
+            return res.status(400).json({ message: "Employee already exists" });
+        }
+
+        const hashedPassword = await bcrypt.hash(password, 10);
+
+        const newEmploye = await employeModel.create({
+            name,
+            email,
+            password: hashedPassword,
+            age,
+            role,
+            contrat: contrat || "Fulltime", 
+            salary,
+            active: true
+        });
+
+        return res.status(201).json({
+            message: "Employee created successfully",
+            data: newEmploye
+        });
+
+    } catch (error) {
+        console.error("Create Employee Error:", error);
+        return res.status(500).json({ message: "Internal server error" });
+    }
+};
+
 // Login Owner
 const loginOwner = async (req: Request, res: Response) => {
     try {

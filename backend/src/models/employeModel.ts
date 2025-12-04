@@ -3,21 +3,21 @@ import mongoose from "mongoose";
 const employeSchema = new mongoose.Schema({
     name: {
         type: String,
-        require: true
+        required: true
     },
     email: {
         type: String,
-        require: true,
+        requiredd: true,
         unique: true
     },
     password: {
         type: String,
-        require: true
+        required: true
     },
 
     age: {
         type: Number,
-        require: true
+        required: true
     },
 
     role: {
@@ -25,13 +25,14 @@ const employeSchema = new mongoose.Schema({
         enum: ["Frontend", "Backend", "Fullstack", "UI designer"],
         default: "Fullstack"
     },
-    contrat: {
-        enum: ["Full-time", "Part-time", "Contract"],
-        default: "Full-time"
+   contrat: { 
+        type: String, 
+        enum: ["Fulltime", "Part-time", "Contract"], 
+        default: "Fulltime" 
     },
     salary: {
         type: Number,
-        require: true
+        required: true
     },
     active: {
         type: Boolean,
@@ -43,15 +44,12 @@ const employeSchema = new mongoose.Schema({
     },
     reason: {
         type: String,
-        require: true
     },
     startDate: {
         type: Date,
-        require: true
     },
     endDate: {
         type: Date,
-        require: true
     },
     status: {
         type: String,
@@ -60,7 +58,7 @@ const employeSchema = new mongoose.Schema({
     },
     createDate: {
         type: Date,
-        default: Date.now()
+        default: Date.now
     }
 
 })

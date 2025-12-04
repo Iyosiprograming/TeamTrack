@@ -1,0 +1,4 @@
+{
+  "message": "Welcome John Doe 👋",
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJvd25lcklkIjoiNjkzMTc4NTQ1YTE1ZjZjNjM5ZjIxMjk0IiwiZW1haWwiOiJvd25lckBleGFtcGxlLmNvbSIsImlhdCI6MTc2NDg0OTc2NiwiZXhwIjoxNzY0ODUzMzY2fQ.tFlO3YbEwTDWl0TE4H0qL7WE5DKGCnCSmw93XQUnZ20"
+}

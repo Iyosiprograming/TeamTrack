@@ -4,6 +4,7 @@ import {
     createOwner,
     loginOwner,
     getAllEmployee,
+    createEmploye,
     deleteTeam,
     createTeam,
     updateTeam,
@@ -25,6 +26,7 @@ router.use(authMiddleware);
 
 // Employee routes
 router.get("/employees", getAllEmployee);
+router.post("create",createEmploye)
 
 // Sick leave routes
 router.get("/sickleave", getAllSickLeave);
