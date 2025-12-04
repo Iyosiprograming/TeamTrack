@@ -1,10 +1,39 @@
 import express from "express";
-import { createOwner,loginOwner } from "../controllers/ownerController.js";
+import { authMiddleware } from "../middleware/authMiddleware.js";
+import {
+    createOwner,
+    loginOwner,
+    getAllEmployee,
+    deleteTeam,
+    createTeam,
+    updateTeam,
+    declineSickLeave,
+    acceptSickLeave,
+    getAllSickLeave
+} from "../controllers/ownerController.js";
 
 const router = express.Router();
 
-router.post("/create", createOwner)
+// =========================
+// OPEN ROUTES (no auth, no rate limit)
+// =========================
+router.post("/create", createOwner);
+router.post("/login", loginOwner);
 
-router.post("/login", loginOwner)
+// PROTECTED ROUTES 
+router.use(authMiddleware);       
 
-export default router
+// Employee routes
+router.get("/employees", getAllEmployee);
+
+// Sick leave routes
+router.get("/sickleave", getAllSickLeave);
+router.put("/sickleave/approve/:id", acceptSickLeave);
+router.put("/sickleave/reject/:id", declineSickLeave);
+
+// Team routes
+router.post("/teams", createTeam);
+router.put("/teams/:id", updateTeam);
+router.delete("/teams/:id", deleteTeam);
+
+export default router;
