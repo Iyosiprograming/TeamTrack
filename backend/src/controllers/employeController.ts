@@ -1,5 +1,6 @@
 import { employeModel } from "../models/employeModel.js"
 import { sickLeaveModel } from "../models/sickleaveModel.js"
+import { teamModel } from "../models/teamModel.js"
 import type { Request, Response } from "express"
 import bcrypt from "bcrypt"
 import jwt from "jsonwebtoken"
@@ -159,7 +160,6 @@ const updateProfile = async (req: Request, res: Response) => {
 }
 
 // apply for Sick Leave
-
 const applyforsickLeave = async (req: Request, res: Response) => {
     const { id } = req.params
     const existingEmploye = await employeModel.findById(id)
@@ -170,7 +170,7 @@ const applyforsickLeave = async (req: Request, res: Response) => {
         })
     }
     const { startDate, endDate, reason } = req.body
-    const sickLeave = await new sickLeaveModel ({
+    const sickLeave = await new sickLeaveModel({
         employeeId: existingEmploye._id,
         employeeName: existingEmploye.name,
         startDate,
@@ -186,4 +186,22 @@ const applyforsickLeave = async (req: Request, res: Response) => {
     })
 }
 
-export { loginEmploye, seeProfile, updateProfile, applyforsickLeave }
+// see the team the user is on
+const seeTeam = async (req: Request, res: Response) => {
+    const { id } = req.params
+    const existingEmploye = await employeModel.findById(id)
+    if (!existingEmploye) {
+        return res.status(404).json({
+            message: "No Employee Found",
+            success: false
+        })
+    }
+    const team = await teamModel.findById(existingEmploye)
+    return res.status(200).json({
+        message: "Team Found",
+        success: true,
+        team
+    })
+}
+
+export { loginEmploye, seeProfile, updateProfile, applyforsickLeave, seeTeam }

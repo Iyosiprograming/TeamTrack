@@ -1,11 +1,13 @@
 import express from "express";
 import ownerRouter from "./routes/ownerRouter.js";
+import employeRouter from "./routes/employeRouter.js";
 import connectDB from "./config/dbConnect.js";
 
 const app = express();
 
 app.use(express.json());
 app.use("/api/owner", ownerRouter);
+app.use("/api/employe", employeRouter)
 const PORT = process.env.PORT || 3000
 const startServer = async () => {
     try {

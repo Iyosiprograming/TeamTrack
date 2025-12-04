@@ -25,10 +25,10 @@ const employeSchema = new mongoose.Schema({
         enum: ["Frontend", "Backend", "Fullstack", "UI designer"],
         default: "Fullstack"
     },
-   contrat: { 
-        type: String, 
-        enum: ["Fulltime", "Part-time", "Contract"], 
-        default: "Fulltime" 
+    contrat: {
+        type: String,
+        enum: ["Fulltime", "Part-time", "Contract"],
+        default: "Fulltime"
     },
     salary: {
         type: Number,

@@ -6,6 +6,7 @@ import { teamModel } from "../models/teamModel.js";
 
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+import crypto from "crypto"
 
 const JWT_SECRET = process.env.JWT_SECRET || "Hello world";
 
@@ -43,9 +44,9 @@ const createOwner = async (req: Request, res: Response) => {
 // create employe
 export const createEmploye = async (req: Request, res: Response) => {
     try {
-        const { name, email, password, age, role, contrat, salary } = req.body;
+        const { name, email, age, role, contrat, salary } = req.body;
 
-        if (!name || !email || !password || !age || !role || !salary) {
+        if (!name || !email || !age || !role || !salary) {
             return res.status(400).json({ message: "All fields are required" });
         }
 
@@ -53,7 +54,7 @@ export const createEmploye = async (req: Request, res: Response) => {
         if (existingEmploye) {
             return res.status(400).json({ message: "Employee already exists" });
         }
-
+        const password = crypto.randomInt(100000, 999999).toString();
         const hashedPassword = await bcrypt.hash(password, 10);
 
         const newEmploye = await employeModel.create({
@@ -62,7 +63,7 @@ export const createEmploye = async (req: Request, res: Response) => {
             password: hashedPassword,
             age,
             role,
-            contrat: contrat || "Fulltime", 
+            contrat: contrat || "Fulltime",
             salary,
             active: true
         });
@@ -168,7 +169,7 @@ const getAllSickLeave = async (req: Request, res: Response) => {
 // accept sick leave
 const acceptSickLeave = async (req: Request, res: Response) => {
     try {
-        const { id } = req.params; 
+        const { id } = req.params;
 
         const sickLeave = await sickLeaveModel.findById(id);
 
@@ -253,7 +254,7 @@ const declineSickLeave = async (req: Request, res: Response) => {
 // Create Team
 const createTeam = async (req: Request, res: Response) => {
     try {
-        const { name, employeeIds } = req.body; 
+        const { name, employeeIds } = req.body;
 
         if (!name || !employeeIds || !Array.isArray(employeeIds)) {
             return res.status(400).json({ message: "Team name and employeeIds array are required" });
@@ -325,4 +326,4 @@ const deleteTeam = async (req: Request, res: Response) => {
     }
 };
 
-export { createOwner, loginOwner, getAllEmployee,deleteTeam,createTeam,updateTeam,declineSickLeave,acceptSickLeave,getAllSickLeave };
+export { createOwner, loginOwner, getAllEmployee, deleteTeam, createTeam, updateTeam, declineSickLeave, acceptSickLeave, getAllSickLeave };
