@@ -7,9 +7,9 @@ import express from "express";
 const router = express.Router();
 
 // owner routes
-router.post("create", createOwner)
+router.post("/create", createOwner)
 router.post("/login", loginOwner)
 // create employe
-router.post("/create", createEmploye)
+router.post("/createEmploye", createEmploye)
 
 export default router

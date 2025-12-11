@@ -17,15 +17,19 @@ const employeModel = new mongoose.Schema({
     // user info
     age: {
         type: Number,
-        requred: true
+        required: true
+
     },
     gender: {
+        type: String,
         enum: ["Male", "Female"],
-        requred: true
+        required: true
+
     },
     phone: {
         type: String,
-        requred: true
+        required: true
+
     },
     // work info
     role: {
@@ -35,7 +39,8 @@ const employeModel = new mongoose.Schema({
     },
     salary: {
         type: Number,
-        requred: true
+        required: true
+
     },
     absentdays: {
         type: Number,
