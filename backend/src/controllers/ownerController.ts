@@ -90,6 +90,57 @@ export const loginOwner = async (req: Request, res: Response) => {
     }
 };
 
+// update admin/owner profile
+export const updateProfile = async (req: Request, res: Response) => {
+    try {
+        if (!req.user || !req.user.id) {
+            return res.status(401).json({ message: "Unauthorized: User not found in token" });
+        }
+
+        const userId = req.user.id;
+
+        const allowedFields = ["email", "password", "passcode"];
+        const updates: any = {};
+
+        for (const field of allowedFields) {
+            if (req.body[field] !== undefined) {
+                updates[field] = req.body[field];
+            }
+        }
+
+        // Hash password only if provided
+        if (updates.password) {
+            updates.password = await bcrypt.hash(updates.password, 10);
+        }
+
+        if (updates.passcode) {
+            updates.passcode = await bcrypt.hash(updates.passcode, 10);
+        }
+
+        const updatedOwner = await ownerModel.findByIdAndUpdate(
+            userId,
+            { $set: updates },
+            { new: true }
+        );
+
+        if (!updatedOwner) {
+            return res.status(404).json({ message: "Owner not found" });
+        }
+
+        return res.status(200).json({
+            message: "Profile updated successfully",
+            owner: updatedOwner
+        });
+
+    } catch (error: any) {
+        console.error("Update error:", error); // shows real error in console
+        return res.status(500).json({
+            message: "Server error",
+            error: error.message || error
+        });
+    }
+}
+
 // create new employe
 export const createEmploye = async (req: Request, res: Response) => {
     try {
