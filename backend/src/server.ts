@@ -2,11 +2,11 @@ import express from "express";
 import owner from "./routes/ownerRouter.js"
 import employe from "./routes/employeRouter.js"
 import connectDB from "./config/dbConfig.js"
-
+import limiter from "./middlewares/ratelimitingMiddleware.js";
 const app = express();
 
 app.use(express.json());
-
+app.use(limiter);
 app.use("/api/owner", owner);
 app.use("/api/employe", employe);
 

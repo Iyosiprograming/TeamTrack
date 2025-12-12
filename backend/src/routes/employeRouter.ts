@@ -1,14 +1,20 @@
+import express from "express";
 import {
     loginEmploye,
     updateEmployeProfile,
     attendance,
     getMyTeam
 } from "../controllers/employeController.js";
-import express from "express"
+import { verifyToken } from "../middlewares/authMiddleware.js";
+
 const employeRouter = express.Router();
-// employe routes
+
 employeRouter.post("/login", loginEmploye);
+
+employeRouter.use(verifyToken);
+
 employeRouter.put("/updateprofile", updateEmployeProfile);
 employeRouter.put("/attendance/:id", attendance);
 employeRouter.get("/myteam/:id", getMyTeam);
-export default employeRouter
+
+export default employeRouter;
