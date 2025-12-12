@@ -1,7 +1,8 @@
 import {
     loginEmploye,
     updateEmployeProfile,
-    attendance
+    attendance,
+    getMyTeam
 } from "../controllers/employeController.js";
 import express from "express"
 const employeRouter = express.Router();
@@ -9,5 +10,5 @@ const employeRouter = express.Router();
 employeRouter.post("/login", loginEmploye);
 employeRouter.put("/updateprofile", updateEmployeProfile);
 employeRouter.put("/attendance/:id", attendance);
-
+employeRouter.get("/myteam/:id", getMyTeam);
 export default employeRouter

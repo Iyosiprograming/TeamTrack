@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import employeModel from "../models/employeModel.js";
-
+import teamModel from "../models/teamModel.js";
 import jwt from "jsonwebtoken"
 import bcrypt from "bcrypt"
 
@@ -112,3 +112,34 @@ export const attendance = async (req: Request, res: Response) => {
         return res.status(500).json({ message: "Internal server error", error: error.message });
     }
 };
+// Get Team Ur On
+export const getMyTeam = async (req: Request, res: Response) => {
+    try {
+        const { id } = req.params;
+
+        const employee = await employeModel.findById(id);
+        if (!employee) {
+            return res.status(404).json({ message: "Employee not found" });
+        }
+
+        const teams = await teamModel.find({ members: employee._id })
+            .populate({
+                path: "members",
+                select: "-password"
+            });
+
+        if (!teams || teams.length === 0) {
+            return res.status(404).json({ message: "No team found for this employee" });
+        }
+
+        return res.status(200).json({
+            message: "Team(s) retrieved successfully",
+            teams
+        });
+
+    } catch (error: any) {
+        console.error("Get team data error:", error);
+        return res.status(500).json({ message: "Internal server error", error: error.message });
+    }
+};
+
