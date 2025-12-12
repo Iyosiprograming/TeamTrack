@@ -184,6 +184,62 @@ export const createEmploye = async (req: Request, res: Response) => {
     }
 };
 
+// delete employe
+export const deleteEmploye = async (req: Request, res: Response) => {
+    try {
+        const employeId = req.params.id;
+
+        const deletedEmploye = await employeModel.findByIdAndDelete(employeId);
+
+        if (!deletedEmploye) {
+            return res.status(404).json({ message: "Employe not found" });
+        }
+
+        return res.status(200).json({
+            message: "Employe deleted successfully",
+            employe: deletedEmploye
+        });
+
+    } catch (error: any) {
+        return res.status(500).json({
+            message: "Server error",
+            error: error.message
+        });
+    }
+};
+// reset password for employe
+export const resetEmployeePassword = async (req: Request, res: Response) => {
+    try {
+        const { email } = req.body;
+
+        if (!email) {
+            return res.status(400).json({ message: "Email is required" });
+        }
+
+        const employee = await employeModel.findOne({ email });
+        if (!employee) {
+            return res.status(404).json({ message: "Employee not found" });
+        }
+
+        const tempPassword = generatePassword();
+        const hashedPassword = await bcrypt.hash(tempPassword, 10);
+        employee.password = hashedPassword;
+
+        await employee.save();
+
+
+        return res.status(200).json({
+            message: "Password reset successfully",
+            tempPassword
+        });
+
+    } catch (error: any) {
+        console.error("Reset Password Error:", error);
+        return res.status(500).json({ message: "Internal server error", error: error.message });
+    }
+};
+
+
 // create new team
 export const createTeam = async (req: Request, res: Response) => {
     try {
