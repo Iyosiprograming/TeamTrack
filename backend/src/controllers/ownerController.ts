@@ -215,3 +215,55 @@ export const createTeam = async (req: Request, res: Response) => {
         return res.status(500).json({ message: "Internal server error" });
     }
 }
+
+// update team
+export const updateTeam = async (req: Request, res: Response) => {
+    try {
+        const teamId = req.params.id;
+
+        const updatedTeam = await teamModel.findByIdAndUpdate(
+            teamId,
+            { $set: req.body },
+            { new: true }
+        );
+
+        if (!updatedTeam) {
+            return res.status(404).json({ message: "Team not found" });
+        }
+
+        return res.status(200).json({
+            message: "Team updated successfully",
+            team: updatedTeam
+        });
+
+    } catch (error: any) {
+        return res.status(500).json({
+            message: "Server error",
+            error: error.message
+        });
+    }
+};
+
+// delete team
+export const deleteTeam = async (req: Request, res: Response) => {
+    try {
+        const teamId = req.params.id;
+
+        const deletedTeam = await teamModel.findByIdAndDelete(teamId);
+
+        if (!deletedTeam) {
+            return res.status(404).json({ message: "Team not found" });
+        }
+
+        return res.status(200).json({
+            message: "Team deleted successfully",
+            team: deletedTeam
+        });
+
+    } catch (error: any) {
+        return res.status(500).json({
+            message: "Server error",
+            error: error.message
+        });
+    }
+};

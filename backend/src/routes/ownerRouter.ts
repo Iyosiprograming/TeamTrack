@@ -3,7 +3,9 @@ import {
     loginOwner,
     createEmploye,
     createTeam,
-    updateProfile
+    updateProfile,
+    updateTeam,
+    deleteTeam
 } from "../controllers/ownerController.js"
 import express from "express";
 const router = express.Router();
@@ -17,5 +19,9 @@ router.put("/updateProfile", updateProfile)
 router.post("/createEmploye", createEmploye)
 // create team
 router.post("/createTeam", createTeam)
+// update team
+router.put("/updateTeam/:id", updateTeam)
+// delete team
+router.delete("/deleteTeam/:id", deleteTeam)
 
 export default router
