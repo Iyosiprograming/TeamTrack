@@ -1,11 +1,10 @@
 import { useState } from 'react'
-
+import { LoginOwner } from './pages/owner/LoginOwner'
 function App() {
-  const [count, setCount] = useState(0)
 
   return (
     <>
-
+      <LoginOwner />
 
     </>
   )
