@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import ownerModel from "../models/ownerModel.js";
 import employeModel from "../models/employeModel.js";
+import teamModel from "../models/teamModel.js";
 import crypto from "crypto"
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
@@ -182,3 +183,35 @@ export const createEmploye = async (req: Request, res: Response) => {
         return res.status(500).json({ message: "Internal server error" });
     }
 };
+
+// create new team
+export const createTeam = async (req: Request, res: Response) => {
+    try {
+        const { name, description, members } = req.body;
+
+        if (!name || !description || !members) {
+            return res.status(400).json({ message: "All fields are required" });
+        }
+
+        const existingTeam = await teamModel.findOne({ name });
+        if (existingTeam) {
+            return res.status(400).json({ message: "Team already exists" });
+        }
+
+        const newTeam = new teamModel({
+            name,
+            description,
+            members
+        });
+
+        newTeam.save();
+
+        return res.status(200).json({
+            message: "Team created successfully",
+            team: newTeam
+        });
+    } catch (error) {
+        console.error("Create Team Error:", error);
+        return res.status(500).json({ message: "Internal server error" });
+    }
+}
