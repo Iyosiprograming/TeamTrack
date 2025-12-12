@@ -48,7 +48,7 @@ export const loginOwner = async (req: Request, res: Response) => {
 
         const owner = await ownerModel.findOne({ email });
         if (!owner) {
-            return res.status(400).json({ message: "Owner not found" });
+            return res.status(400).json({ message: "Owner33 not found" });
         }
 
         const isPasswordValid = await bcrypt.compare(password, owner.password);

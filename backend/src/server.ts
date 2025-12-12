@@ -1,5 +1,6 @@
 import express from "express";
 import owner from "./routes/ownerRouter.js"
+import employe from "./routes/employeRouter.js"
 import connectDB from "./config/dbConfig.js"
 
 const app = express();
@@ -7,6 +8,7 @@ const app = express();
 app.use(express.json());
 
 app.use("/api/owner", owner);
+app.use("/api/employe", employe);
 
 const PORT = process.env.PORT || 3000;
 
