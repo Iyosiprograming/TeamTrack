@@ -323,3 +323,36 @@ export const deleteTeam = async (req: Request, res: Response) => {
         });
     }
 };
+
+// Get All employes
+export const getAllEmployes = async (req: Request, res: Response) => {
+    try {
+        const employes = await employeModel.find();
+        return res.status(200).json({
+            message: "Employes fetched successfully",
+            employes
+        });
+    } catch (error: any) {
+        return res.status(500).json({
+            message: "Server error",
+            error: error.message
+        });
+    }
+};
+
+// Get All Teams
+export const getAllTeams = async (req: Request, res: Response) => {
+    try {
+        const teams = await teamModel.find();
+        return res.status(200).json({
+            message: "Teams fetched successfully",
+            teams
+        });
+    } catch (error: any) {
+        return res.status(500).json({
+            message: "Server error",
+            error: error.message
+        });
+    }
+};
+

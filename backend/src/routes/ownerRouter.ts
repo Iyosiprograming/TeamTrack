@@ -7,7 +7,9 @@ import {
     updateTeam,
     deleteTeam,
     deleteEmploye,
-    resetEmployeePassword
+    resetEmployeePassword,
+    getAllEmployes,
+    getAllTeams
 } from "../controllers/ownerController.js"
 import express from "express";
 const router = express.Router();
@@ -29,5 +31,8 @@ router.post("/createTeam", createTeam)
 router.put("/updateTeam/:id", updateTeam)
 // delete team
 router.delete("/deleteTeam/:id", deleteTeam)
-
+// get all employes
+router.get("/getAllEmployes", getAllEmployes)
+// get all teams
+router.get("/getAllTeams", getAllTeams)
 export default router
