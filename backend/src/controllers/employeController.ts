@@ -4,6 +4,15 @@ import employeModel from "../models/employeModel.js";
 import jwt from "jsonwebtoken"
 import bcrypt from "bcrypt"
 
+// date calculatoer
+const checkTodayDate = () => {
+    const today = new Date()
+    const day = today.getDate()
+    const month = today.getMonth()
+    const year = today.getFullYear()
+    return `${year}-${month}-${day}`
+}
+
 // employe login
 export const loginEmploye = async (req: Request, res: Response) => {
     try {
@@ -77,5 +86,29 @@ export const updateEmployeProfile = async (req: Request, res: Response) => {
             message: "Server error",
             error: error.message || error
         });
+    }
+};
+// attendace 
+export const attendance = async (req: Request, res: Response) => {
+    try {
+        const { id } = req.params;
+        const employee = await employeModel.findById(id);
+        if (!employee) {
+            return res.status(404).json({ message: "Employee not found" });
+        }
+
+        const today = checkTodayDate();
+
+        if (employee.presentdays.includes(today)) {
+            return res.status(400).json({ message: "Employee already marked attendance" });
+        }
+
+        employee.presentdays.push(today);
+        await employee.save();
+
+        return res.status(200).json({ message: "Attendance marked successfully" });
+    } catch (error: any) {
+        console.error("Attendance Error:", error);
+        return res.status(500).json({ message: "Internal server error", error: error.message });
     }
 };

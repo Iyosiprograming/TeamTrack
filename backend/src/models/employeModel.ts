@@ -42,9 +42,9 @@ const employeModel = new mongoose.Schema({
         required: true
 
     },
-    absentdays: {
-        type: Number,
-        default: 0
+    presentdays: {
+        type: [String],
+        default: []
     },
     timeStamp: {
         type: Date,
