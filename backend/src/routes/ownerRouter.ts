@@ -13,11 +13,12 @@ import {
     getAllTeams
 } from "../controllers/ownerController.js";
 import { verifyToken } from "../middlewares/authMiddleware.js";
+import { loginLimiter } from "../middlewares/ratelimitingMiddleware.js";
 
 const router = express.Router();
 
 router.post("/create", createOwner);
-router.post("/login", loginOwner);
+router.post("/login", loginLimiter, loginOwner);
 
 router.use(verifyToken);
 
