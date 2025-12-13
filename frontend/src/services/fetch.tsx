@@ -42,6 +42,16 @@ export const createEmploye = async (data: { name: string, email: string, age: nu
         return response.data;
     } catch (error: any) {
         console.error("Create employe failed:", error);
-        throw error;
+        throw error.response.data;
+    }
+}
+// create team
+export const createTeam = async (data: { name: string, description: string }) => {
+    try {
+        const response = await axios.post(`${BACKEND_URL}owner/createteam`, data);
+        return response.data;
+    } catch (error: any) {
+        console.error("Create team failed:", error);
+        throw error.response.data;
     }
 }

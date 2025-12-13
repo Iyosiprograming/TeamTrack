@@ -1,10 +1,12 @@
 import { TotaldataComponent } from "../../components/owner/TotaldataComponent";
-import { CreateemployeComponent } from "../../components/owner/CreateemployeComponent"
+import { CreateEmployeComponent } from "../../components/owner/CreateemployeComponent"
+import { CreateTeamComponent } from "../../components/owner/CreateteamCompnent"
 export const Dashbaord = () => {
     return (
         <div>
             <TotaldataComponent />
-            <CreateemployeComponent />
+            <CreateEmployeComponent />
+            <CreateTeamComponent />
         </div>
     )
 }
