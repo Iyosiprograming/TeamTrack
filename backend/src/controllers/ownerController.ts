@@ -360,6 +360,11 @@ export const getAllTeams = async (req: Request, res: Response) => {
 export const getSingleEmploye = async (req: Request, res: Response) => {
     try {
         const employe = await employeModel.findOne({ name: req.params.name });
+        if (!employe) {
+            return res.status(400).json({
+                message: "Employe Not Found",
+            })
+        }
         return res.status(200).json({
             message: "Employe fetched successfully",
             employe

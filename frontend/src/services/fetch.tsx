@@ -55,3 +55,13 @@ export const createTeam = async (data: { name: string, description: string }) =>
         throw error.response.data;
     }
 }
+// get signle employe
+export const getSingleEmploye = async (name: string) => {
+    try {
+        const response = await axios.get(`${BACKEND_URL}owner/getSingleEmploye/${name}`, { withCredentials: true });
+        return response.data;
+    } catch (error: any) {
+        console.error("Get single employe failed:", error);
+        throw error.response.data;
+    }
+}
