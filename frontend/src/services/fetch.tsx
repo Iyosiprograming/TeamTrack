@@ -65,3 +65,17 @@ export const getSingleEmploye = async (name: string) => {
         throw error.response.data;
     }
 }
+
+// login employee
+export const loginemploye = async (email: string, password: string) => {
+    try {
+        const response = await axios.post(`${BACKEND_URL}employe/login`, {
+            email,
+            password,
+        });
+        return response.data;
+    } catch (error: any) {
+        console.error("Login failed:", error);
+        throw error.response.data;
+    }
+}
