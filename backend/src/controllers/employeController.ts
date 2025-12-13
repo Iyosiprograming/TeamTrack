@@ -22,7 +22,7 @@ export const loginEmploye = async (req: Request, res: Response) => {
         }
         const employe = await employeModel.findOne({ email })
         if (!employe) {
-            return res.status(400).json({ message: "Employe not found" })
+            return res.status(400).json({ message: "🛑Employe not found" })
         }
         const isPasswordValid = await bcrypt.compare(password, employe.password)
         if (!isPasswordValid) {
@@ -35,7 +35,7 @@ export const loginEmploye = async (req: Request, res: Response) => {
             sameSite: "lax",
             maxAge: 3600000
         })
-        return res.status(200).json({ message: "Employe logged in successfully" })
+        return res.status(200).json({ message: "🥳Employe logged in successfully" })
     }
     catch (error: any) {
         return res.status(500).json({ message: "Internal server error" })
@@ -46,7 +46,7 @@ export const loginEmploye = async (req: Request, res: Response) => {
 export const updateEmployeProfile = async (req: Request, res: Response) => {
     try {
         if (!req.user || !req.user.id) {
-            return res.status(401).json({ message: "Unauthorized: User not found in token" });
+            return res.status(401).json({ message: "🛑Unauthorized: User not found in token" });
         }
 
         const userId = req.user.id;
@@ -72,18 +72,18 @@ export const updateEmployeProfile = async (req: Request, res: Response) => {
         );
 
         if (!updatedEmployee) {
-            return res.status(404).json({ message: "Employee not found" });
+            return res.status(404).json({ message: "🛑Employee not found" });
         }
 
         return res.status(200).json({
-            message: "Profile updated successfully",
+            message: "🥳Profile updated successfully",
             employee: updatedEmployee
         });
 
     } catch (error: any) {
         console.error("Update error:", error); // shows real error in console
         return res.status(500).json({
-            message: "Server error",
+            message: "🛑Server error",
             error: error.message || error
         });
     }
@@ -94,22 +94,22 @@ export const attendance = async (req: Request, res: Response) => {
         const { id } = req.params;
         const employee = await employeModel.findById(id);
         if (!employee) {
-            return res.status(404).json({ message: "Employee not found" });
+            return res.status(404).json({ message: "🛑Employee not found" });
         }
 
         const today = checkTodayDate();
 
         if (employee.presentdays.includes(today)) {
-            return res.status(400).json({ message: "Employee already marked attendance" });
+            return res.status(400).json({ message: "🛑Employee already marked attendance" });
         }
 
         employee.presentdays.push(today);
         await employee.save();
 
-        return res.status(200).json({ message: "Attendance marked successfully" });
+        return res.status(200).json({ message: "🥳Attendance marked successfully" });
     } catch (error: any) {
         console.error("Attendance Error:", error);
-        return res.status(500).json({ message: "Internal server error", error: error.message });
+        return res.status(500).json({ message: "🛑Internal server error", error: error.message });
     }
 };
 // Get Team Ur On
@@ -119,7 +119,7 @@ export const getMyTeam = async (req: Request, res: Response) => {
 
         const employee = await employeModel.findById(id);
         if (!employee) {
-            return res.status(404).json({ message: "Employee not found" });
+            return res.status(404).json({ message: "🛑Employee not found" });
         }
 
         const teams = await teamModel.find({ members: employee._id })
@@ -129,17 +129,17 @@ export const getMyTeam = async (req: Request, res: Response) => {
             });
 
         if (!teams || teams.length === 0) {
-            return res.status(404).json({ message: "No team found for this employee" });
+            return res.status(404).json({ message: "🛑No team found for this employee" });
         }
 
         return res.status(200).json({
-            message: "Team(s) retrieved successfully",
+            message: "🥳Team(s) retrieved successfully",
             teams
         });
 
     } catch (error: any) {
         console.error("Get team data error:", error);
-        return res.status(500).json({ message: "Internal server error", error: error.message });
+        return res.status(500).json({ message: "🛑Internal server error", error: error.message });
     }
 };
 
