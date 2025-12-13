@@ -1,37 +1,49 @@
-import express from "express";
+import express, { Request, Response } from "express";
 import {
-    createOwner,
-    loginOwner,
-    createEmploye,
-    createTeam,
-    updateProfile,
-    updateTeam,
-    deleteTeam,
-    deleteEmploye,
-    resetEmployeePassword,
-    getAllEmployes,
-    getAllTeams,
-    getSingleEmploye
+  createOwner,
+  loginOwner,
+  createEmploye,
+  createTeam,
+  updateProfile,
+  updateTeam,
+  deleteTeam,
+  deleteEmploye,
+  resetEmployeePassword,
+  getAllEmployes,
+  getAllTeams,
+  getSingleEmploye
 } from "../controllers/ownerController.js";
 import { verifyToken } from "../middlewares/authMiddleware.js";
 import { loginLimiter } from "../middlewares/ratelimitingMiddleware.js";
 
-const router = express.Router();
+const ownerRouter = express.Router();
 
-router.post("/create", createOwner);
-router.post("/login", loginLimiter, loginOwner);
+/* ================= PUBLIC ROUTES ================= */
+ownerRouter.post("/create", createOwner);
+ownerRouter.post("/login", loginLimiter, loginOwner);
 
-router.use(verifyToken);
+/* ================= AUTH CHECK ================= */
+ownerRouter.get("/auth/me", verifyToken, (req: Request, res: Response) => {
+  res.status(200).json({ user: req.user });
+});
 
-router.put("/updateProfile", updateProfile);
-router.post("/createEmploye", createEmploye);
-router.put("/resetPassword", resetEmployeePassword);
-router.delete("/deleteEmploye/:id", deleteEmploye);
-router.post("/createTeam", createTeam);
-router.put("/updateTeam/:id", updateTeam);
-router.delete("/deleteTeam/:id", deleteTeam);
-router.get("/getAllEmployes", getAllEmployes);
-router.get("/getAllTeams", getAllTeams);
-router.get("/getSingleEmploye/:name", getSingleEmploye);
+/* ================= PROTECTED ROUTES ================= */
+ownerRouter.use(verifyToken);
 
-export default router;
+// Profile
+ownerRouter.put("/updateProfile", updateProfile);
+
+// Employee management
+ownerRouter.post("/createEmploye", createEmploye);
+ownerRouter.put("/resetPassword", resetEmployeePassword);
+ownerRouter.delete("/deleteEmploye/:id", deleteEmploye);
+ownerRouter.get("/getAllEmployes", getAllEmployes);
+ownerRouter.get("/getSingleEmploye/:name", getSingleEmploye);
+
+// Team management
+ownerRouter.post("/createTeam", createTeam);
+ownerRouter.put("/updateTeam/:id", updateTeam);
+ownerRouter.delete("/deleteTeam/:id", deleteTeam);
+ownerRouter.get("/getAllTeams", getAllTeams);
+
+export default ownerRouter;

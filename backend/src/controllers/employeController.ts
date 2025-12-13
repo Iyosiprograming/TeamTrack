@@ -16,31 +16,46 @@ const checkTodayDate = () => {
 // employe login
 export const loginEmploye = async (req: Request, res: Response) => {
     try {
-        const { email, password } = req.body
-        if (!email || !password) {
-            return res.status(400).json({ message: "All fields are required" })
-        }
-        const employe = await employeModel.findOne({ email })
-        if (!employe) {
-            return res.status(400).json({ message: "🛑Employe not found" })
-        }
-        const isPasswordValid = await bcrypt.compare(password, employe.password)
-        if (!isPasswordValid) {
-            return res.status(400).json({ message: "Invalid credentials" })
-        }
-        const token = jwt.sign({ id: employe._id, email: employe.email }, process.env.JWT_SECRET || "secret", { expiresIn: "1h" })
-        res.cookie("token", token, {
-            httpOnly: true,
-            secure: process.env.NODE_ENV === "production",
-            sameSite: "lax",
-            maxAge: 3600000
-        })
-        return res.status(200).json({ message: "🥳Employe logged in successfully" })
+      const { email, password } = req.body;
+  
+      if (!email || !password) {
+        return res.status(400).json({ message: "All fields are required" });
+      }
+  
+      const employe = await employeModel.findOne({ email });
+      if (!employe) {
+        return res.status(400).json({ message: "🛑Employe not found" });
+      }
+  
+      const isPasswordValid = await bcrypt.compare(password, employe.password);
+      if (!isPasswordValid) {
+        return res.status(400).json({ message: "Invalid credentials" });
+      }
+  
+      // Sign JWT with role
+      const token = jwt.sign(
+        { id: employe._id, email: employe.email, role: "employe" }, // add role
+        process.env.JWT_SECRET || "SuperSecretKey123!@#456",
+        { expiresIn: "1h" }
+      );
+  
+      // Set cookie
+      res.cookie("token", token, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "lax",
+        maxAge: 3600000, // 1 hour
+      });
+  
+      return res.status(200).json({
+        message: "🥳 Employe logged in successfully",
+        success: true,
+      });
+    } catch (error: any) {
+      console.error("Login Employe Error:", error);
+      return res.status(500).json({ message: "Internal server error" });
     }
-    catch (error: any) {
-        return res.status(500).json({ message: "Internal server error" })
-    }
-}
+  };
 // get personal profile
 export const getProfile = async (req: Request, res: Response) => {
     const { id } = req.params

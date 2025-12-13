@@ -45,51 +45,48 @@ export const createOwner = async (req: Request, res: Response) => {
 // login owner/admin
 export const loginOwner = async (req: Request, res: Response) => {
     try {
-        const { email, password, passcode } = req.body;
-
-        const owner = await ownerModel.findOne({ email });
-        if (!owner) {
-            return res.status(400).json({ message: "Owner33 not found" });
-        }
-
-        const isPasswordValid = await bcrypt.compare(password, owner.password);
-        const isPasscodeValid = await bcrypt.compare(passcode, owner.passcode);
-
-        if (!isPasswordValid || !isPasscodeValid) {
-            return res.status(400).json(
-                {
-                    message: "Invalid credentials"
-                }
-            );
-        }
-
-        // Create JWT
-        const token = jwt.sign(
-            { id: owner._id, email: owner.email },
-            process.env.JWT_SECRET || "secret",
-            { expiresIn: "1h" }
-        );
-
-        res.cookie("token", token, {
-            httpOnly: true,
-            secure: process.env.NODE_ENV === "production",
-            sameSite: "lax",
-            maxAge: 3600000
-        });
-
-        return res.status(200).json({
-            message: `Welcome ${owner.name} 👋`,
-
-        });
+      const { email, password, passcode } = req.body;
+  
+      if (!email || !password || !passcode) {
+        return res.status(400).json({ message: "All fields are required" });
+      }
+  
+      const owner = await ownerModel.findOne({ email });
+      if (!owner) {
+        return res.status(400).json({ message: "🛑 Owner not found" });
+      }
+  
+      const isPasswordValid = await bcrypt.compare(password, owner.password);
+      const isPasscodeValid = await bcrypt.compare(passcode, owner.passcode);
+  
+      if (!isPasswordValid || !isPasscodeValid) {
+        return res.status(400).json({ message: "Invalid credentials" });
+      }
+  
+      // Sign JWT with role
+      const token = jwt.sign(
+        { id: owner._id, email: owner.email, role: "owner" }, // add role
+        process.env.JWT_SECRET || "SuperSecretKey123!@#456",
+        { expiresIn: "1h" }
+      );
+  
+      // Set cookie
+      res.cookie("token", token, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "lax",
+        maxAge: 3600000, // 1 hour
+      });
+  
+      return res.status(200).json({
+        message: "Login successful",
+        success: true,
+      });
     } catch (error) {
-        console.error("Login Owner Error:", error);
-        return res.status(500).json(
-            {
-                message: "Internal server error"
-            }
-        );
+      console.error("Login Owner Error:", error);
+      return res.status(500).json({ message: "Internal server error" });
     }
-};
+  };
 
 // update admin/owner profile
 export const updateProfile = async (req: Request, res: Response) => {
