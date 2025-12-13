@@ -79,3 +79,40 @@ export const loginemploye = async (email: string, password: string) => {
         throw error.response.data;
     }
 }
+
+// get profile
+export const getProfile = async () => {
+    try {
+        const response = await axios.get(`${BACKEND_URL}employe/getProfile`, { withCredentials: true });
+        return response.data;
+    } catch (error: any) {
+        console.error("Get profile failed:", error);
+        throw error.response.data;
+    }
+}
+
+// update employe profile
+export const updateProfile = async (email: string, password: string, phone: string) => {
+    try {
+        const response = await axios.put(`${BACKEND_URL}employe/updateProfile`, {
+            email,
+            password,
+            phone,
+        });
+        return response.data;
+    } catch (error: any) {
+        console.error("Update profile failed:", error);
+        throw error.response.data;
+    }
+}
+
+// atendace
+export const attendance = async () => {
+    try {
+        const response = await axios.get(`${BACKEND_URL}employe/attendance`, { withCredentials: true });
+        return response.data;
+    } catch (error: any) {
+        console.error("Get attendance failed:", error);
+        throw error.response.data;
+    }
+}

@@ -41,7 +41,15 @@ export const loginEmploye = async (req: Request, res: Response) => {
         return res.status(500).json({ message: "Internal server error" })
     }
 }
-
+// get personal profile
+export const getProfile = async (req: Request, res: Response) => {
+    const { id } = req.params
+    const employe = await employeModel.findById(id)
+    if (!employe) {
+        return res.status(404).json({ message: "🛑Employe not found" })
+    }
+    return res.status(200).json({ message: "🥳Employe profile retrieved successfully", employe })
+}
 // updaet profile
 export const updateEmployeProfile = async (req: Request, res: Response) => {
     try {

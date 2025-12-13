@@ -16,13 +16,13 @@ export const Loginemploye = () => {
                 })
             }
             toast(response.message || "Login successful", {
-                duration: 5000,
+                duration: 2000,
 
             })
         } catch (error: any) {
             console.log(error);
             toast(error.message || "Login failed", {
-                duration: 5000,
+                duration: 2000,
 
             })
         }
