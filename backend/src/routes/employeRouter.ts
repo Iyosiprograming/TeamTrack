@@ -5,6 +5,7 @@ import {
   updateEmployeProfile,
   attendance,
   getMyTeam,
+  getProfile,
 } from "../controllers/employeController.js";
 import { verifyToken } from "../middlewares/authMiddleware.js";
 import { loginLimiter } from "../middlewares/ratelimitingMiddleware.js";
@@ -22,6 +23,7 @@ employeRouter.get("/auth/me", verifyToken, (req: Request, res: Response) => {
 /* ================= PROTECTED ================= */
 employeRouter.use(verifyToken);
 
+employeRouter.get("/getProfile", getProfile);
 employeRouter.put("/updateprofile", updateEmployeProfile);
 employeRouter.put("/attendance", attendance);
 employeRouter.get("/myteam", getMyTeam);

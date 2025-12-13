@@ -16,9 +16,9 @@ const checkTodayDate = () => {
 // employe login
 export const loginEmploye = async (req: Request, res: Response) => {
     try {
-      const { email, password } = req.body;
-        email.toUpperCase();
-        password.toUpperCase();
+      let { email, password } = req.body;
+        email = email.toUpperCase();
+        password = password.toUpperCase();
       if (!email || !password) {
         return res.status(400).json({ message: "All fields are required" });
       }
@@ -59,12 +59,21 @@ export const loginEmploye = async (req: Request, res: Response) => {
   };
 // get personal profile
 export const getProfile = async (req: Request, res: Response) => {
-    const { id } = req.params
-    const employe = await employeModel.findById(id)
-    if (!employe) {
-        return res.status(404).json({ message: "🛑Employe not found" })
+    try {
+        if (!req.user || !req.user.id) {
+            return res.status(401).json({ message: "🛑Unauthorized: User not found in token" });
+        }
+
+        const userId = req.user.id;
+        const employe = await employeModel.findById(userId).select("-password");
+        if (!employe) {
+            return res.status(404).json({ message: "🛑Employe not found" });
+        }
+        return res.status(200).json({ message: "🥳Employe profile retrieved successfully", employe });
+    } catch (error: any) {
+        console.error("Get profile error:", error);
+        return res.status(500).json({ message: "🛑Internal server error", error: error.message });
     }
-    return res.status(200).json({ message: "🥳Employe profile retrieved successfully", employe })
 }
 // updaet profile
 export const updateEmployeProfile = async (req: Request, res: Response) => {
@@ -115,8 +124,12 @@ export const updateEmployeProfile = async (req: Request, res: Response) => {
 // attendace 
 export const attendance = async (req: Request, res: Response) => {
     try {
-        const { id } = req.params;
-        const employee = await employeModel.findById(id);
+        if (!req.user || !req.user.id) {
+            return res.status(401).json({ message: "🛑Unauthorized: User not found in token" });
+        }
+
+        const userId = req.user.id;
+        const employee = await employeModel.findById(userId);
         if (!employee) {
             return res.status(404).json({ message: "🛑Employee not found" });
         }
@@ -139,9 +152,12 @@ export const attendance = async (req: Request, res: Response) => {
 // Get Team Ur On
 export const getMyTeam = async (req: Request, res: Response) => {
     try {
-        const { id } = req.params;
+        if (!req.user || !req.user.id) {
+            return res.status(401).json({ message: "🛑Unauthorized: User not found in token" });
+        }
 
-        const employee = await employeModel.findById(id);
+        const userId = req.user.id;
+        const employee = await employeModel.findById(userId);
         if (!employee) {
             return res.status(404).json({ message: "🛑Employee not found" });
         }

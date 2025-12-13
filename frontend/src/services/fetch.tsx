@@ -113,10 +113,10 @@ export const updateProfile = async (data: { email?: string; password?: string; p
 // attendance
 export const attendance = async () => {
   try {
-    const response = await axios.get(`${BACKEND_URL}employe/attendance`, { withCredentials: true });
+    const response = await axios.put(`${BACKEND_URL}employe/attendance`, {}, { withCredentials: true });
     return response.data;
   } catch (error: any) {
-    console.error("Get attendance failed:", error);
+    console.error("Mark attendance failed:", error);
     throw error.response?.data || error;
   }
 };

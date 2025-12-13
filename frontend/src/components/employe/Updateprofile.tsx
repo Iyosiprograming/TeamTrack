@@ -13,7 +13,7 @@ export const UpdateProfile = () => {
         setLoading(true);
 
         try {
-            const response = await updateProfile(email, password, phone);
+            const response = await updateProfile({ email, password, phone });
             console.log(response);
             toast.success("Profile updated successfully!");
         } catch (error) {

@@ -14,7 +14,7 @@ export const CreateTeamComponent = () => {
     const handleCreateTeam = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
         try {
-            await createTeam({ name, description })
+            await createTeam(name, description)
             toast.success("Team Created Successfully")
             setName('')
             setDescription('')
