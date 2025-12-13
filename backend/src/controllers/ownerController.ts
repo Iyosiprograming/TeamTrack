@@ -356,3 +356,18 @@ export const getAllTeams = async (req: Request, res: Response) => {
     }
 };
 
+// find single user by name
+export const getSingleEmploye = async (req: Request, res: Response) => {
+    try {
+        const employe = await employeModel.findOne({ name: req.params.name });
+        return res.status(200).json({
+            message: "Employe fetched successfully",
+            employe
+        });
+    } catch (error: any) {
+        return res.status(500).json({
+            message: "Server error",
+            error: error.message
+        });
+    }
+};

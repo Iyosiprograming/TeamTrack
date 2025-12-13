@@ -10,7 +10,8 @@ import {
     deleteEmploye,
     resetEmployeePassword,
     getAllEmployes,
-    getAllTeams
+    getAllTeams,
+    getSingleEmploye
 } from "../controllers/ownerController.js";
 import { verifyToken } from "../middlewares/authMiddleware.js";
 import { loginLimiter } from "../middlewares/ratelimitingMiddleware.js";
@@ -31,5 +32,6 @@ router.put("/updateTeam/:id", updateTeam);
 router.delete("/deleteTeam/:id", deleteTeam);
 router.get("/getAllEmployes", getAllEmployes);
 router.get("/getAllTeams", getAllTeams);
+router.get("/getSingleEmploye/:name", getSingleEmploye);
 
 export default router;
