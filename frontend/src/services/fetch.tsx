@@ -10,7 +10,7 @@ export const Signinowner = async (email: string, password: string, passcode: str
     const response = await axios.post(
       `${BACKEND_URL}owner/login`,
       { email, password, passcode },
-      { withCredentials: true } // ensure cookie is stored
+      { withCredentials: true } 
     );
     return response.data;
   } catch (error: any) {
@@ -38,9 +38,9 @@ export const getCounts = async () => {
 };
 
 // create employee
-export const createEmploye = async (data: any) => {
+export const createEmploye = async (name: string, email: string, age: number, gender: string, phone: string, role: string, salary: number) => {
   try {
-    const response = await axios.post(`${BACKEND_URL}owner/createEmploye`, data, { withCredentials: true });
+    const response = await axios.post(`${BACKEND_URL}owner/createEmploye`, {name, email, age, gender, phone, role, salary}, { withCredentials: true });
     return response.data;
   } catch (error: any) {
     console.error("Create employe failed:", error);
@@ -49,9 +49,9 @@ export const createEmploye = async (data: any) => {
 };
 
 // create team
-export const createTeam = async (data: any) => {
+export const createTeam = async (name: string, description: string) => {
   try {
-    const response = await axios.post(`${BACKEND_URL}owner/createTeam`, data, { withCredentials: true });
+    const response = await axios.post(`${BACKEND_URL}owner/createTeam`, {name, description}, { withCredentials: true });
     return response.data;
   } catch (error: any) {
     console.error("Create team failed:", error);
@@ -60,15 +60,20 @@ export const createTeam = async (data: any) => {
 };
 
 // get single employee
+// search by NAME (not email)
 export const getSingleEmploye = async (name: string) => {
   try {
-    const response = await axios.get(`${BACKEND_URL}owner/getSingleEmploye/${name}`, { withCredentials: true });
-    return response.data;
+    const response = await axios.get(
+      `${BACKEND_URL}owner/getSingleEmploye/${name}`,
+      { withCredentials: true }
+    )
+    return response.data
   } catch (error: any) {
-    console.error("Get single employe failed:", error);
-    throw error.response?.data || error;
+    console.error('Get single employe failed:', error)
+    throw error.response?.data || error
   }
-};
+}
+
 
 // ---------------- EMPLOYEE ---------------- //
 

@@ -17,7 +17,8 @@ const checkTodayDate = () => {
 export const loginEmploye = async (req: Request, res: Response) => {
     try {
       const { email, password } = req.body;
-  
+        email.toUpperCase();
+        password.toUpperCase();
       if (!email || !password) {
         return res.status(400).json({ message: "All fields are required" });
       }

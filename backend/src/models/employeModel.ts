@@ -34,9 +34,9 @@ const employeModel = new mongoose.Schema({
     // work info
     role: {
         type: String,
-        enum: ["Frontend", "Backend", "Fullstack"],
-        default: "Frontend"
-    },
+        required: true,
+        default: "Fullstack"
+      },
     salary: {
         type: Number,
         required: true

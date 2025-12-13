@@ -138,48 +138,61 @@ export const updateProfile = async (req: Request, res: Response) => {
         });
     }
 }
-
-// create new employe
+// create employee
 export const createEmploye = async (req: Request, res: Response) => {
     try {
-        const { name, email, age, gender, phone, role, salary } = req.body;
-
-        if (!name || !email || !age || !gender || !phone || !role || !salary) {
-            return res.status(400).json({ message: "All fields are required" });
-        }
-
-        const existingEmploye = await employeModel.findOne({ email });
-        if (existingEmploye) {
-            return res.status(400).json({ message: "Employee already exists" });
-        }
-
-        // Generate a temporary password
-        const tempPassword = generatePassword();
-        const hashedPassword = await bcrypt.hash(tempPassword, 10);
-
-        const newEmploye = new employeModel({
-            name,
-            email,
-            password: hashedPassword,
-            tempPassword,
-            age,
-            gender,
-            phone,
-            role,
-            salary
-        });
-
-        newEmploye.save();
-
-        return res.status(200).json({
-            message: "Employee created successfully",
-            tempPassword
-        });
+      let { name, email, age, gender, phone, role, salary } = req.body;
+  
+      // Validate required fields
+      if (!name || !email || !age || !gender || !phone || !role || !salary) {
+        return res.status(400).json({ message: "All fields are required" });
+      }
+  
+      // Normalize data
+      name = name.toUpperCase();
+      role = role.toUpperCase();
+      // Normalize gender to match enum: 'Male' | 'Female'
+      gender =
+        gender.toLowerCase() === "male"
+          ? "Male"
+          : gender.toLowerCase() === "female"
+          ? "Female"
+          : gender;
+  
+      // Check if employee already exists
+      const existingEmploye = await employeModel.findOne({ email });
+      if (existingEmploye) {
+        return res.status(400).json({ message: "Employee already exists" });
+      }
+  
+      // Generate temp password
+      const tempPassword = generatePassword();
+      const hashedPassword = await bcrypt.hash(tempPassword, 10);
+  
+      const newEmploye = new employeModel({
+        name,
+        email,
+        password: hashedPassword,
+        tempPassword,
+        age,
+        gender,
+        phone,
+        role,
+        salary,
+      });
+  
+      await newEmploye.save();
+  
+      return res.status(201).json({
+        message: "Employee created successfully",
+        tempPassword,
+      });
     } catch (error) {
-        console.error("Create Employee Error:", error);
-        return res.status(500).json({ message: "Internal server error" });
+      console.error("Create Employee Error:", error);
+      return res.status(500).json({ message: "Internal server error" });
     }
-};
+  };
+  
 
 // delete employe
 export const deleteEmploye = async (req: Request, res: Response) => {
@@ -353,23 +366,31 @@ export const getAllTeams = async (req: Request, res: Response) => {
     }
 };
 
-// find single user by name
+// get single employee
 export const getSingleEmploye = async (req: Request, res: Response) => {
     try {
-        const employe = await employeModel.findOne({ name: req.params.name });
-        if (!employe) {
-            return res.status(400).json({
-                message: "Employe Not Found",
-            })
-        }
-        return res.status(200).json({
-            message: "Employe fetched successfully",
-            employe
+      const name = req.params.name.trim();
+  
+      const employe = await employeModel.findOne({
+        name: { $regex: `^${name}$`, $options: "i" }
+      });
+  
+      if (!employe) {
+        return res.status(400).json({
+          message: "Employe Not Found"
         });
+      }
+  
+      return res.status(200).json({
+        message: "Employe fetched successfully",
+        employe
+      });
     } catch (error: any) {
-        return res.status(500).json({
-            message: "Server error",
-            error: error.message
-        });
+      return res.status(500).json({
+        message: "Server error",
+        error: error.message
+      });
     }
-};
+  };
+  
+  
